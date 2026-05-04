@@ -7,11 +7,11 @@ export function parseApiDate(value?: string | number | null): Date | null {
 }
 
 export function getExpiryLabel(expiresAt?: number | string | null, ttl?: number | null): string {
-  if (!expiresAt && !ttl) return 'Không giới hạn hoặc API không cung cấp TTL';
-  if (ttl && ttl > 0) return `TTL: ${ttl} gi�y`;
+  if (!expiresAt && !ttl) return 'Kh\u00F4ng gi\u1EDBi h\u1EA1n ho\u1EB7c API kh\u00F4ng cung c\u1EA5p TTL';
+  if (ttl && ttl > 0) return `TTL: ${ttl} gi\u00E2y`;
   const parsed = parseApiDate(expiresAt);
-  if (!parsed) return 'Không giới hạn hoặc API không cung cấp TTL';
-  return `H?t h?n: ${parsed.toLocaleString('vi-VN')}`;
+  if (!parsed) return 'Kh\u00F4ng gi\u1EDBi h\u1EA1n ho\u1EB7c API kh\u00F4ng cung c\u1EA5p TTL';
+  return `H\u1EBFt h\u1EA1n: ${parsed.toLocaleString('vi-VN')}`;
 }
 
 export function sortMessagesByNewest(messages: InboxMessage[]): InboxMessage[] {

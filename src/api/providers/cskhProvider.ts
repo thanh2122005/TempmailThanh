@@ -11,7 +11,7 @@ export class CskhTempMailProvider implements TempMailProvider {
   async createRandomAddress(): Promise<MailboxAddressResponse> {
     const res = await apiRequest<any>('/api/new', { method: 'POST', body: '{}' });
     const address = res.address || res.email;
-    if (!address) throw new Error('API không trả về địa chỉ hợp lệ.');
+    if (!address) throw new Error('API kh\u00F4ng tr\u1EA3 v\u1EC1 \u0111\u1ECBa ch\u1EC9 h\u1EE3p l\u1EC7.');
     return { ...res, address };
   }
 
@@ -21,7 +21,7 @@ export class CskhTempMailProvider implements TempMailProvider {
       body: JSON.stringify({ username, domain }),
     });
     const address = res.address || res.email;
-    if (!address) throw new Error('API không trả về địa chỉ hợp lệ.');
+    if (!address) throw new Error('API kh\u00F4ng tr\u1EA3 v\u1EC1 \u0111\u1ECBa ch\u1EC9 h\u1EE3p l\u1EC7.');
     return { ...res, address };
   }
 

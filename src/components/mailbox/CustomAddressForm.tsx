@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { validateUsername } from '../../utils/validators';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
@@ -26,7 +26,7 @@ export function CustomAddressForm(props: Props) {
 
   return (
     <Card>
-      <h3 className="mb-2 text-sm font-semibold">Tạo địa chỉ tùy chỉnh</h3>
+      <h3 className="mb-2 text-sm font-semibold">{"T\u1EA1o \u0111\u1ECBa ch\u1EC9 t\u00F9y ch\u1EC9nh"}</h3>
       <div className="space-y-2">
         <Input
           value={username}
@@ -34,7 +34,7 @@ export function CustomAddressForm(props: Props) {
             setUsername(e.target.value);
             setError(validateUsername(e.target.value) || '');
           }}
-          placeholder="Nhập username"
+          placeholder={"Nh\u1EADp username"}
         />
         <DomainSelector
           domains={props.domains}
@@ -60,14 +60,14 @@ export function CustomAddressForm(props: Props) {
                 e?.status === 404 ||
                 (e?.message && (e.message.includes('404') || e.message.includes('Cannot POST')))
               ) {
-                setError('API hiện chưa hỗ trợ tạo địa chỉ tùy chỉnh. Vui lòng dùng tạo ngẫu nhiên.');
+                setError('API hi\u1EC7n ch\u01B0a h\u1ED7 tr\u1EE3 t\u1EA1o \u0111\u1ECBa ch\u1EC9 t\u00F9y ch\u1EC9nh. Vui l\u00F2ng d\u00F9ng t\u1EA1o ng\u1EABu nhi\u00EAn.');
               } else {
-                setError(e instanceof Error ? e.message : 'Lỗi tạo địa chỉ');
+                setError(e instanceof Error ? e.message : 'L\u1ED7i t\u1EA1o \u0111\u1ECBa ch\u1EC9');
               }
             }
           }}
         >
-          Tạo địa chỉ này
+          {"T\u1EA1o \u0111\u1ECBa ch\u1EC9 n\u00E0y"}
         </Button>
       </div>
     </Card>

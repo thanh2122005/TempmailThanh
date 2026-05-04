@@ -37,7 +37,7 @@ export async function apiRequest<T>(path: string, init?: RequestInit): Promise<T
       const message =
         typeof data === 'object' && data && 'message' in data
           ? String((data as Record<string, unknown>).message)
-          : `Yêu cầu thất bại (${response.status})`;
+          : `Y\u00EAu c\u1EA7u th\u1EA5t b\u1EA1i (${response.status})`;
       throw new ApiRequestError(message, response.status);
     }
 
@@ -45,9 +45,9 @@ export async function apiRequest<T>(path: string, init?: RequestInit): Promise<T
   } catch (error) {
     if (error instanceof ApiRequestError) throw error;
     if (error instanceof DOMException && error.name === 'AbortError') {
-      throw new ApiRequestError('Hết thời gian chờ API, vui lòng thử lại.');
+      throw new ApiRequestError('H\u1EBFt th\u1EDDi gian ch\u1EDD API, vui l\u00F2ng th\u1EED l\u1EA1i.');
     }
-    throw new ApiRequestError('Không thể kết nối API. Vui lòng kiểm tra mạng hoặc CORS.');
+    throw new ApiRequestError('Kh\u00F4ng th\u1EC3 k\u1EBFt n\u1ED1i API. Vui l\u00F2ng ki\u1EC3m tra m\u1EA1ng ho\u1EB7c CORS.');
   } finally {
     clearTimeout(timeoutId);
   }

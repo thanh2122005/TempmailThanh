@@ -37,7 +37,7 @@ export function useTempMail() {
       setSelectedDomain(nextDomain);
       setString(storageKeys.selectedDomain, nextDomain);
     } catch (error) {
-      setDomainsError(error instanceof Error ? error.message : 'Không thể tải danh sách domain.');
+      setDomainsError(error instanceof Error ? error.message : 'Kh\u00F4ng th\u1EC3 t\u1EA3i danh s\u00E1ch domain.');
     } finally {
       setDomainsLoading(false);
     }
@@ -57,7 +57,7 @@ export function useTempMail() {
       }
       setLastRefreshedAt(new Date().toISOString());
     } catch (error) {
-      setInboxError(error instanceof Error ? error.message : 'Không thể tải hộp thư.');
+      setInboxError(error instanceof Error ? error.message : 'Kh\u00F4ng th\u1EC3 t\u1EA3i h\u1ED9p th\u01B0.');
     } finally {
       setInboxLoading(false);
     }
@@ -77,7 +77,7 @@ export function useTempMail() {
       await loadInbox(data.address);
       return data;
     } catch (error) {
-      setAddressError(error instanceof Error ? error.message : 'Không thể tạo địa chỉ ngẫu nhiên.');
+      setAddressError(error instanceof Error ? error.message : 'Kh\u00F4ng th\u1EC3 t\u1EA1o \u0111\u1ECBa ch\u1EC9 ng\u1EABu nhi\u00EAn.');
       return null;
     } finally {
       setAddressLoading(false);
@@ -102,7 +102,7 @@ export function useTempMail() {
       await loadInbox(data.address);
       return data;
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Không thể tạo địa chỉ tùy chỉnh.';
+      const msg = error instanceof Error ? error.message : 'Kh\u00F4ng th\u1EC3 t\u1EA1o \u0111\u1ECBa ch\u1EC9 t\u00F9y ch\u1EC9nh.';
       setAddressError(msg);
       throw new Error(msg);
     } finally {
@@ -123,7 +123,7 @@ export function useTempMail() {
       const detail = await tempMailApi.getMailDetail(address, id);
       setSelectedMessageDetail(detail);
     } catch (error) {
-      setMessageError(error instanceof Error ? error.message : 'Không thể tải chi tiết email.');
+      setMessageError(error instanceof Error ? error.message : 'Kh\u00F4ng th\u1EC3 t\u1EA3i chi ti\u1EBFt email.');
     } finally {
       setMessageLoading(false);
     }
