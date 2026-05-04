@@ -6,11 +6,11 @@ export function normalizeUsername(username: string): string {
 
 export function validateUsername(username: string): string | null {
   const value = normalizeUsername(username);
-  if (!value) return 'Tên không du?c d? tr?ng';
-  if (value.length > 40) return 'Tên t?i da 40 ký t?';
-  if (!USERNAME_REGEX.test(value)) return 'Tên ch? du?c dùng a-z, 0-9, d?u ch?m, g?ch du?i, g?ch ngang';
-  if (value.startsWith('.') || value.endsWith('.')) return 'Tên không nên b?t d?u ho?c k?t thúc b?ng d?u ch?m';
-  if (value.includes('..')) return 'Tên không nên ch?a hai d?u ch?m liên ti?p';
+  if (!value) return 'Tï¿½n khï¿½ng du?c d? tr?ng';
+  if (value.length > 40) return 'Tï¿½n táº¡i da 40 kï¿½ t?';
+  if (!USERNAME_REGEX.test(value)) return 'Tï¿½n ch? du?c dï¿½ng a-z, 0-9, d?u ch?m, g?ch du?i, g?ch ngang';
+  if (value.startsWith('.') || value.endsWith('.')) return 'Tï¿½n khï¿½ng nï¿½n b?t d?u ho?c k?t thï¿½c b?ng d?u ch?m';
+  if (value.includes('..')) return 'TÃªn khÃ´ng nÃªn chá»©a hai dáº¥u cháº¥m liÃªn tiáº¿p';
   return null;
 }
 

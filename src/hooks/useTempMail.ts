@@ -37,7 +37,7 @@ export function useTempMail() {
       setSelectedDomain(nextDomain);
       setString(storageKeys.selectedDomain, nextDomain);
     } catch (error) {
-      setDomainsError(error instanceof Error ? error.message : 'Khong the tai danh sach domain.');
+      setDomainsError(error instanceof Error ? error.message : 'Không thể tải danh sách domain.');
     } finally {
       setDomainsLoading(false);
     }
@@ -57,7 +57,7 @@ export function useTempMail() {
       }
       setLastRefreshedAt(new Date().toISOString());
     } catch (error) {
-      setInboxError(error instanceof Error ? error.message : 'Khong the tai hop thu.');
+      setInboxError(error instanceof Error ? error.message : 'Không thể tải hộp thư.');
     } finally {
       setInboxLoading(false);
     }
@@ -77,7 +77,7 @@ export function useTempMail() {
       await loadInbox(data.address);
       return data;
     } catch (error) {
-      setAddressError(error instanceof Error ? error.message : 'Khong the tao dia chi ngau nhien.');
+      setAddressError(error instanceof Error ? error.message : 'Không thể tạo địa chỉ ngẫu nhiên.');
       return null;
     } finally {
       setAddressLoading(false);
@@ -102,7 +102,7 @@ export function useTempMail() {
       await loadInbox(data.address);
       return data;
     } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Khong the tao dia chi tuy chinh.';
+      const msg = error instanceof Error ? error.message : 'Không thể tạo địa chỉ tùy chỉnh.';
       setAddressError(msg);
       throw new Error(msg);
     } finally {
@@ -123,7 +123,7 @@ export function useTempMail() {
       const detail = await tempMailApi.getMailDetail(address, id);
       setSelectedMessageDetail(detail);
     } catch (error) {
-      setMessageError(error instanceof Error ? error.message : 'Khong the tai chi tiet email.');
+      setMessageError(error instanceof Error ? error.message : 'Không thể tải chi tiết email.');
     } finally {
       setMessageLoading(false);
     }

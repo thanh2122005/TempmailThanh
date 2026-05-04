@@ -1,24 +1,24 @@
 import type { InboxMessage } from '../types/api';
 
 export function formatDateTime(value?: string): string {
-  if (!value) return 'KhÙng rı th?i gian';
+  if (!value) return 'Kh√¥ng r√µ th·ªùi gian';
   const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return 'KhÙng rı th?i gian';
+  if (Number.isNaN(d.getTime())) return 'Kh√¥ng r√µ th·ªùi gian';
   return d.toLocaleString('vi-VN');
 }
 
 export function formatRelativeTime(value?: string): string {
-  if (!value) return 'KhÙng rı th?i gian';
+  if (!value) return 'Kh√¥ng r√µ th·ªùi gian';
   const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return 'KhÙng rı th?i gian';
+  if (Number.isNaN(d.getTime())) return 'Kh√¥ng r√µ th·ªùi gian';
   const diff = Date.now() - d.getTime();
   const mins = Math.floor(diff / 60000);
   if (mins < 1) return 'V?a xong';
-  if (mins < 60) return `${mins} ph˙t tru?c`;
+  if (mins < 60) return `${mins} phÔøΩt tru?c`;
   const hours = Math.floor(mins / 60);
   if (hours < 24) return `${hours} gi? tru?c`;
   const days = Math.floor(hours / 24);
-  return `${days} ng‡y tru?c`;
+  return `${days} ngÔøΩy tru?c`;
 }
 
 export function truncateText(text: string, maxLength: number): string {
@@ -26,10 +26,10 @@ export function truncateText(text: string, maxLength: number): string {
 }
 
 export function getMessagePreview(message: InboxMessage): string {
-  return truncateText(message.text?.trim() || 'KhÙng cÛ n?i dung', 100);
+  return truncateText(message.text?.trim() || 'Kh√¥ng c√≥ n·ªôi dung', 100);
 }
 
 export function normalizeEmailSubject(subject?: string): string {
   const value = subject?.trim();
-  return value ? value : 'KhÙng cÛ tiÍu d?';
+  return value ? value : 'KhÔøΩng cÔøΩ tiÔøΩu d?';
 }

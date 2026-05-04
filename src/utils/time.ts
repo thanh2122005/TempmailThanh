@@ -7,10 +7,10 @@ export function parseApiDate(value?: string | number | null): Date | null {
 }
 
 export function getExpiryLabel(expiresAt?: number | string | null, ttl?: number | null): string {
-  if (!expiresAt && !ttl) return 'Kh�ng gi?i h?n ho?c API kh�ng cung c?p TTL';
-  if (ttl && ttl > 0) return `TTL: ${ttl} gi�y`;
+  if (!expiresAt && !ttl) return 'Không giới hạn hoặc API không cung cấp TTL';
+  if (ttl && ttl > 0) return `TTL: ${ttl} gi�y`;
   const parsed = parseApiDate(expiresAt);
-  if (!parsed) return 'Kh�ng gi?i h?n ho?c API kh�ng cung c?p TTL';
+  if (!parsed) return 'Không giới hạn hoặc API không cung cấp TTL';
   return `H?t h?n: ${parsed.toLocaleString('vi-VN')}`;
 }
 

@@ -36,3 +36,7 @@ npm run dev
 npm run build
 ```
 
+
+- Ghi UI text UTF-8 đã được kiểm tra.
+- Ghi không còn ký tự lỗi trong src/.
+- Ghi sẵn sàng redeploy Vercel.
