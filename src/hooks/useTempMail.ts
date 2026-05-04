@@ -3,7 +3,7 @@ import { tempMailApi } from '../api/tempMailApi';
 import type { InboxMessage, MailDetail, MailboxAddressResponse, ReadStatusMap } from '../types/api';
 import { safeGetJSON, safeSetJSON, setString, getString, storageKeys } from '../utils/storage';
 import { sortMessagesByNewest } from '../utils/time';
-import { normalizeUsername, validateUsername } from '../utils/validators';
+
 import { useRecentAddresses } from './useRecentAddresses';
 
 export function useTempMail() {
@@ -84,32 +84,6 @@ export function useTempMail() {
     }
   }, [loadInbox, recent]);
 
-  const createCustomAddress = useCallback(async (username: string, domain: string) => {
-    const normalized = normalizeUsername(username);
-    const validation = validateUsername(normalized);
-    if (validation) throw new Error(validation);
-
-    setAddressLoading(true);
-    setAddressError('');
-    try {
-      const data = await tempMailApi.createCustomAddress(normalized, domain);
-      setCurrentAddress(data.address);
-      setString(storageKeys.currentAddress, data.address);
-      setAddressMeta(data);
-      recent.add(data.address);
-      setSelectedMessageId('');
-      setSelectedMessageDetail(null);
-      await loadInbox(data.address);
-      return data;
-    } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Kh\u00F4ng th\u1EC3 t\u1EA1o \u0111\u1ECBa ch\u1EC9 t\u00F9y ch\u1EC9nh.';
-      setAddressError(msg);
-      throw new Error(msg);
-    } finally {
-      setAddressLoading(false);
-    }
-  }, [loadInbox, recent]);
-
   const loadMessage = useCallback(async (address: string, id: string) => {
     if (!address || !id) return;
     setMessageLoading(true);
@@ -151,6 +125,18 @@ export function useTempMail() {
     await loadInbox(address);
   }, [loadInbox, recent]);
 
+  // Local address set: no API call to create, just set + load inbox
+  const setCurrentAddressLocal = useCallback(async (address: string) => {
+    setCurrentAddress(address);
+    setString(storageKeys.currentAddress, address);
+    setAddressMeta(null);
+    setAddressError('');
+    recent.add(address);
+    setSelectedMessageId('');
+    setSelectedMessageDetail(null);
+    await loadInbox(address);
+  }, [loadInbox, recent]);
+
   return {
     recent,
     domains,
@@ -177,10 +163,10 @@ export function useTempMail() {
     initializeApp,
     loadDomains,
     createRandomAddress,
-    createCustomAddress,
     loadInbox,
     refreshInbox,
     loadMessage,
     setCurrentAddressFromRecent,
+    setCurrentAddressLocal,
   };
 }

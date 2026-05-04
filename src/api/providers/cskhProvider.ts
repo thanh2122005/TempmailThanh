@@ -15,6 +15,7 @@ export class CskhTempMailProvider implements TempMailProvider {
     return { ...res, address };
   }
 
+  // Keep for future use if API adds support
   async createCustomAddress(username: string, domain: string): Promise<MailboxAddressResponse> {
     const res = await apiRequest<any>('/api/custom', {
       method: 'POST',
@@ -27,14 +28,35 @@ export class CskhTempMailProvider implements TempMailProvider {
 
   async getInbox(address: string): Promise<InboxResponse> {
     const safe = encodeURIComponent(address);
-    const res = await apiRequest<InboxResponse>(`/api/inbox/${safe}`);
-    return { ...res, messages: Array.isArray(res.messages) ? res.messages : [] };
+    const res = await apiRequest<any>(`/api/inbox/${safe}`);
+    // API returns { emails: [...] } not { messages: [...] }
+    // Each email has: id, from, to, subject, date, preview
+    const rawList = Array.isArray(res.emails) ? res.emails : (Array.isArray(res.messages) ? res.messages : []);
+    const messages = rawList.map((e: any) => ({
+      id: e.id || '',
+      from: e.from || '',
+      to: e.to || '',
+      subject: e.subject || '',
+      receivedAt: e.date || e.receivedAt || '',
+      text: e.preview || e.text || '',
+      html: e.html || '',
+    }));
+    return { messages };
   }
 
-  async getMailDetail(address: string, id: string): Promise<MailDetail> {
-    const safeAddress = encodeURIComponent(address);
+  async getMailDetail(_address: string, id: string): Promise<MailDetail> {
+    // API uses GET /api/email/:id (no address in path)
     const safeId = encodeURIComponent(id);
-    return apiRequest<MailDetail>(`/api/mail/${safeAddress}/${safeId}`);
+    const res = await apiRequest<any>(`/api/email/${safeId}`);
+    return {
+      id: res.id || id,
+      from: res.from || '',
+      to: res.to || '',
+      subject: res.subject || '',
+      receivedAt: res.date || res.receivedAt || '',
+      text: res.textBody || res.text || res.preview || '',
+      html: res.body || res.html || '',
+    };
   }
 
   async addDomain(domain: string): Promise<unknown> {

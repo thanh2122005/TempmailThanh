@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { validateUsername } from '../../utils/validators';
+import { validateUsername, normalizeUsername } from '../../utils/validators';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { Input } from '../common/Input';
@@ -49,21 +49,20 @@ export function CustomAddressForm(props: Props) {
         </p>
         {error && <p className="text-xs text-red-300">{error}</p>}
         <Button
-          disabled={props.loading || !!error || !props.selectedDomain}
+          disabled={props.loading || !!error || !username.trim() || !props.selectedDomain}
           onClick={async () => {
+            const normalized = normalizeUsername(username);
+            const validation = validateUsername(normalized);
+            if (validation) {
+              setError(validation);
+              return;
+            }
             try {
-              await props.onSubmit(username, props.selectedDomain);
+              await props.onSubmit(normalized, props.selectedDomain);
               setUsername('');
               setError('');
             } catch (e: any) {
-              if (
-                e?.status === 404 ||
-                (e?.message && (e.message.includes('404') || e.message.includes('Cannot POST')))
-              ) {
-                setError('API hi\u1EC7n ch\u01B0a h\u1ED7 tr\u1EE3 t\u1EA1o \u0111\u1ECBa ch\u1EC9 t\u00F9y ch\u1EC9nh. Vui l\u00F2ng d\u00F9ng t\u1EA1o ng\u1EABu nhi\u00EAn.');
-              } else {
-                setError(e instanceof Error ? e.message : 'L\u1ED7i t\u1EA1o \u0111\u1ECBa ch\u1EC9');
-              }
+              setError(e instanceof Error ? e.message : 'L\u1ED7i t\u1EA1o \u0111\u1ECBa ch\u1EC9');
             }
           }}
         >
