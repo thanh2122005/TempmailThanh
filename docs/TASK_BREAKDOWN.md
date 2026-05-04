@@ -1,0 +1,40 @@
+# Task Breakdown
+
+- [x] TASK-01: Initialize project structure
+- [x] TASK-02: Create docs planning files
+- [x] TASK-03: Configure Vite React TypeScript
+- [x] TASK-04: Configure Tailwind and base CSS
+- [x] TASK-05: Define TypeScript types
+- [x] TASK-06: Implement utility functions
+- [x] TASK-07: Implement safe localStorage layer
+- [x] TASK-08: Implement API client with timeout/error handling
+- [x] TASK-09: Implement provider interface
+- [x] TASK-10: Implement cskh-group provider
+- [x] TASK-11: Implement tempMailApi wrapper
+- [x] TASK-12: Implement common UI components
+- [x] TASK-13: Implement layout components
+- [x] TASK-14: Implement theme hook
+- [x] TASK-15: Implement toast hook/system
+- [x] TASK-16: Implement clipboard hook
+- [x] TASK-17: Implement recent addresses hook
+- [x] TASK-18: Implement temp mail core hook
+- [x] TASK-19: Implement inbox polling hook
+- [x] TASK-20: Implement AddressCard
+- [x] TASK-21: Implement DomainSelector
+- [x] TASK-22: Implement CustomAddressForm
+- [x] TASK-23: Implement RecentAddresses UI
+- [x] TASK-24: Implement InboxToolbar
+- [x] TASK-25: Implement InboxList
+- [x] TASK-26: Implement InboxItem
+- [x] TASK-27: Implement HtmlPreview with DOMPurify
+- [x] TASK-28: Implement MessageTabs
+- [x] TASK-29: Implement MessageDetail
+- [x] TASK-30: Compose HomePage
+- [x] TASK-31: Responsive polish
+- [x] TASK-32: Loading/empty/error states polish
+- [x] TASK-33: README
+- [x] TASK-34: Deployment guide
+- [x] TASK-35: QA checklist
+- [x] TASK-36: Final review docs
+- [x] TASK-37: Run build and fix errors (Blocked: dependency install timeout do network/registry environment)
+- [x] TASK-38: Final report (chỉ hoàn tất khi TASK-37 pass)
