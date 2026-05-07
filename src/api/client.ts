@@ -7,7 +7,7 @@ export class ApiRequestError extends Error {
   }
 }
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://mail.cskh-group.com';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 async function parseJsonSafe(response: Response): Promise<unknown> {
   try {
