@@ -11,5 +11,29 @@ interface Props {
 }
 
 export function DomainSelector({ domains, value, loading, error, onChange, onRetry }: Props) {
-  return <div className="space-y-2"><Select disabled={loading || domains.length === 0} value={value} onChange={(e) => onChange(e.target.value)}>{domains.map((domain) => <option key={domain} value={domain}>{domain}</option>)}</Select>{error && <div className="flex items-center justify-between gap-2 text-xs text-red-300"><span>{error}</span><Button onClick={onRetry}>{"T\u1EA3i l\u1EA1i"}</Button></div>}</div>;
+  return (
+    <div className="space-y-2">
+      <Select
+        disabled={loading || domains.length === 0}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      >
+        {loading && <option>Đang tải domain...</option>}
+        {!loading && domains.length === 0 && <option>Chưa có domain</option>}
+        {domains.map((domain) => (
+          <option key={domain} value={domain}>
+            @{domain}
+          </option>
+        ))}
+      </Select>
+      {error && (
+        <div className="flex items-center justify-between gap-2 rounded-lg border border-rose-400/30 bg-rose-500/10 px-3 py-2 text-xs text-rose-200">
+          <span className="min-w-0 truncate">{error}</span>
+          <Button onClick={onRetry} size="sm" variant="secondary">
+            Tải lại
+          </Button>
+        </div>
+      )}
+    </div>
+  );
 }

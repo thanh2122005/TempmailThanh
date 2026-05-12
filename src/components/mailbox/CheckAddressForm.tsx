@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { Mail, Search } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { Input } from '../common/Input';
+import { isValidEmailLikeAddress } from '../../utils/validators';
 
 interface Props {
   onCheck: (address: string) => void;
@@ -13,8 +15,8 @@ export function CheckAddressForm({ onCheck }: Props) {
 
   const handleSubmit = () => {
     const trimmed = address.trim();
-    if (!trimmed || !trimmed.includes('@')) {
-      setError('\u0110\u1ECBa ch\u1EC9 email kh\u00F4ng h\u1EE3p l\u1EC7');
+    if (!isValidEmailLikeAddress(trimmed)) {
+      setError('Địa chỉ email không hợp lệ');
       return;
     }
     setError('');
@@ -23,17 +25,30 @@ export function CheckAddressForm({ onCheck }: Props) {
   };
 
   return (
-    <Card>
-      <h3 className="mb-2 text-sm font-semibold">{"Ki\u1EC3m tra \u0111\u1ECBa ch\u1EC9 c\u00F3 s\u1EB5n"}</h3>
-      <div className="space-y-2">
+    <Card title="Kiểm tra địa chỉ có sẵn" icon={<Search size={16} />}>
+      <div className="space-y-3">
         <Input
+          leftIcon={<Mail size={14} />}
           value={address}
-          onChange={(e) => { setAddress(e.target.value); setError(''); }}
+          onChange={(e) => {
+            setAddress(e.target.value);
+            setError('');
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleSubmit();
+          }}
           placeholder="user@domain.com"
+          invalid={!!error}
         />
-        {error && <p className="text-xs text-red-300">{error}</p>}
-        <Button onClick={handleSubmit} disabled={!address.trim()}>
-          {"M\u1EDF inbox n\u00E0y"}
+        {error && <p className="text-xs text-rose-300">{error}</p>}
+        <Button
+          onClick={handleSubmit}
+          size="md"
+          variant="secondary"
+          disabled={!address.trim()}
+          className="w-full"
+        >
+          Mở inbox này
         </Button>
       </div>
     </Card>
