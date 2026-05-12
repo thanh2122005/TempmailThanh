@@ -1,4 +1,4 @@
-import { Clock3, Trash2 } from 'lucide-react';
+import { Clock3, History, Trash2 } from 'lucide-react';
 import type { RecentAddressItem } from '../../types/api';
 import { formatRelativeTime } from '../../utils/format';
 import { Button } from '../common/Button';
@@ -12,5 +12,57 @@ interface Props {
 }
 
 export function RecentAddresses({ items, onUse, onRemove, onClear }: Props) {
-  return <Card><div className="mb-2 flex items-center justify-between"><h3 className="text-sm font-semibold">{"\u0110\u1ECBa ch\u1EC9 g\u1EA7n \u0111\u00E2y"}</h3><Button className="bg-slate-700 hover:bg-slate-600" onClick={onClear}>{"X\u00F3a t\u1EA5t c\u1EA3"}</Button></div><div className="space-y-2">{items.map((item) => <div key={item.address} className="rounded-lg border border-slate-700 p-2 text-xs"><p className="break-all font-mono">{item.address}</p><p className="mb-2 mt-1 flex items-center gap-1 text-slate-400"><Clock3 size={12} />{formatRelativeTime(item.lastUsedAt)}</p><div className="flex gap-2"><Button onClick={() => onUse(item.address)}>{"D\u00F9ng l\u1EA1i"}</Button><Button className="bg-slate-700 hover:bg-slate-600" onClick={() => onRemove(item.address)}><Trash2 size={12} /></Button></div></div>)}</div></Card>;
+  return (
+    <Card
+      title="Địa chỉ gần đây"
+      icon={<History size={16} />}
+      action={
+        items.length > 0 ? (
+          <Button onClick={onClear} variant="ghost" size="sm">
+            Xóa tất cả
+          </Button>
+        ) : null
+      }
+    >
+      {items.length === 0 ? (
+        <p className="text-xs text-slate-400">Chưa có địa chỉ nào được lưu.</p>
+      ) : (
+        <ul className="space-y-2">
+          {items.map((item) => (
+            <li
+              key={item.address}
+              className="group rounded-xl border border-white/10 bg-white/[0.03] p-2.5 transition-colors hover:border-indigo-400/40 hover:bg-white/[0.06]"
+            >
+              <button
+                type="button"
+                onClick={() => onUse(item.address)}
+                className="block w-full truncate break-all text-left font-mono text-xs text-slate-100"
+                title={`Mở ${item.address}`}
+              >
+                {item.address}
+              </button>
+              <div className="mt-1.5 flex items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-1 text-[10px] text-slate-400">
+                  <Clock3 size={10} /> {formatRelativeTime(item.lastUsedAt)}
+                </span>
+                <div className="flex items-center gap-1">
+                  <Button size="sm" variant="secondary" onClick={() => onUse(item.address)}>
+                    Dùng lại
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    iconOnly
+                    aria-label={`Xóa ${item.address}`}
+                    onClick={() => onRemove(item.address)}
+                    leftIcon={<Trash2 size={14} />}
+                  />
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Card>
+  );
 }

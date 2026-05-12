@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { AtSign, Wand2 } from 'lucide-react';
 import { validateUsername, normalizeUsername } from '../../utils/validators';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
@@ -19,22 +20,46 @@ interface Props {
 export function CustomAddressForm(props: Props) {
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
+
   const preview = useMemo(
-    () => `${username || 'username'}@${props.selectedDomain || 'domain.com'}`,
-    [username, props.selectedDomain]
+    () => `${normalizeUsername(username) || 'username'}@${props.selectedDomain || 'domain.com'}`,
+    [username, props.selectedDomain],
   );
 
+  const canSubmit =
+    !props.loading && !error && !!username.trim() && !!props.selectedDomain;
+
+  const handleSubmit = async () => {
+    const normalized = normalizeUsername(username);
+    const validation = validateUsername(normalized);
+    if (validation) {
+      setError(validation);
+      return;
+    }
+    try {
+      await props.onSubmit(normalized, props.selectedDomain);
+      setUsername('');
+      setError('');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Lỗi tạo địa chỉ');
+    }
+  };
+
   return (
-    <Card>
-      <h3 className="mb-2 text-sm font-semibold">{"T\u1EA1o \u0111\u1ECBa ch\u1EC9 t\u00F9y ch\u1EC9nh"}</h3>
-      <div className="space-y-2">
+    <Card title="Tạo địa chỉ tùy chỉnh" icon={<Wand2 size={16} />}>
+      <div className="space-y-3">
         <Input
+          leftIcon={<AtSign size={14} />}
           value={username}
           onChange={(e) => {
             setUsername(e.target.value);
             setError(validateUsername(e.target.value) || '');
           }}
-          placeholder={"Nh\u1EADp username"}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && canSubmit) void handleSubmit();
+          }}
+          placeholder="Nhập username"
+          invalid={!!error}
         />
         <DomainSelector
           domains={props.domains}
@@ -44,29 +69,16 @@ export function CustomAddressForm(props: Props) {
           onChange={props.onSelectDomain}
           onRetry={props.onRetryDomains}
         />
-        <p className="text-xs text-slate-300">
-          Preview: <span className="font-mono">{preview}</span>
-        </p>
-        {error && <p className="text-xs text-red-300">{error}</p>}
-        <Button
-          disabled={props.loading || !!error || !username.trim() || !props.selectedDomain}
-          onClick={async () => {
-            const normalized = normalizeUsername(username);
-            const validation = validateUsername(normalized);
-            if (validation) {
-              setError(validation);
-              return;
-            }
-            try {
-              await props.onSubmit(normalized, props.selectedDomain);
-              setUsername('');
-              setError('');
-            } catch (e: any) {
-              setError(e instanceof Error ? e.message : 'L\u1ED7i t\u1EA1o \u0111\u1ECBa ch\u1EC9');
-            }
-          }}
-        >
-          {"T\u1EA1o \u0111\u1ECBa ch\u1EC9 n\u00E0y"}
+
+        <div className="flex items-center justify-between gap-2 rounded-lg border border-dashed border-white/10 bg-white/[0.03] px-3 py-2 text-xs text-slate-300">
+          <span>Preview:</span>
+          <span className="truncate font-mono text-slate-100">{preview}</span>
+        </div>
+
+        {error && <p className="text-xs text-rose-300">{error}</p>}
+
+        <Button disabled={!canSubmit} onClick={handleSubmit} size="md" className="w-full">
+          Tạo địa chỉ này
         </Button>
       </div>
     </Card>

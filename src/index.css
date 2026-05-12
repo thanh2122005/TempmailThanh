@@ -10,16 +10,97 @@ html.light {
   color-scheme: light;
 }
 
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  @apply bg-slate-950 text-slate-100;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: rgb(226 232 240);
+  background-color: #05060f;
+  background-image:
+    radial-gradient(1200px 600px at 85% -10%, rgba(99, 102, 241, 0.18), transparent 60%),
+    radial-gradient(900px 500px at 10% 10%, rgba(14, 165, 233, 0.16), transparent 60%),
+    radial-gradient(800px 500px at 50% 110%, rgba(168, 85, 247, 0.18), transparent 60%),
+    linear-gradient(180deg, #05060f 0%, #070916 60%, #05060f 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 html.light body {
-  @apply bg-slate-100 text-slate-900;
+  color: rgb(15 23 42);
+  background-color: #f1f5fb;
+  background-image:
+    radial-gradient(1100px 600px at 85% -10%, rgba(99, 102, 241, 0.18), transparent 60%),
+    radial-gradient(900px 500px at 10% 10%, rgba(56, 189, 248, 0.16), transparent 60%),
+    radial-gradient(800px 500px at 50% 110%, rgba(168, 85, 247, 0.18), transparent 60%),
+    linear-gradient(180deg, #f1f5fb 0%, #e9eefb 60%, #f1f5fb 100%);
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* Pretty scrollbars */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.45);
+  background-clip: padding-box;
+}
+
+/* Sanitised email content gets consistent, readable typography */
+.email-html {
+  color: rgb(226 232 240);
+  word-break: break-word;
+}
+.email-html a {
+  color: rgb(129 140 248);
+  text-decoration: underline;
+}
+.email-html img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.email-html table {
+  max-width: 100%;
+}
+.email-html p,
+.email-html div,
+.email-html li {
+  line-height: 1.55;
+}
+html.light .email-html {
+  color: rgb(30 41 59);
+}
+
+/* Soft pulsing glow used on OTP card */
+@keyframes otp-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.35); }
+  50% { box-shadow: 0 0 40px 8px rgba(99, 102, 241, 0.25); }
+}
+.otp-glow {
+  animation: otp-glow 3.5s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
 }

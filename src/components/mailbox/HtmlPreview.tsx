@@ -1,6 +1,21 @@
 import DOMPurify from 'dompurify';
 
 export function HtmlPreview({ html }: { html?: string }) {
-  if (!html) return <p className="text-sm text-slate-300">{"Email n\u00E0y kh\u00F4ng c\u00F3 n\u1ED9i dung HTML."}</p>;
-  return <div className="max-w-none rounded-xl border border-slate-700 p-3 text-sm" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />;
+  if (!html) {
+    return (
+      <p className="rounded-xl border border-white/10 bg-white/[0.02] p-4 text-sm text-slate-400">
+        Email này không có nội dung HTML.
+      </p>
+    );
+  }
+  const clean = DOMPurify.sanitize(html, {
+    FORBID_TAGS: ['style', 'script'],
+    FORBID_ATTR: ['onerror', 'onload'],
+  });
+  return (
+    <div
+      className="email-html max-w-none rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm leading-relaxed"
+      dangerouslySetInnerHTML={{ __html: clean }}
+    />
+  );
 }

@@ -1,8 +1,42 @@
-import { RefreshCw } from 'lucide-react';
+import { Inbox, RefreshCw } from 'lucide-react';
 import { formatDateTime } from '../../utils/format';
 import { Button } from '../common/Button';
-import { Card } from '../common/Card';
 
-export function InboxToolbar({ count, loading, lastRefreshedAt, onRefresh }: { count: number; loading: boolean; lastRefreshedAt: string; onRefresh: () => void }) {
-  return <Card><div className="flex items-center justify-between"><div><h3 className="text-sm font-semibold">{"H\u1ED9p th\u01B0 \u0111\u1EBFn"}</h3><p className="text-xs text-slate-300">{count} email {"\u2022"} {loading ? '\u0110ang \u0111\u1ED3ng b\u1ED9...' : '\u0110\u00E3 \u0111\u1ED3ng b\u1ED9'}</p><p className="text-xs text-slate-400">{"C\u1EADp nh\u1EADt"}: {formatDateTime(lastRefreshedAt)}</p></div><Button onClick={onRefresh}><RefreshCw size={14} /> Refresh</Button></div></Card>;
+interface Props {
+  count: number;
+  loading: boolean;
+  lastRefreshedAt: string;
+  onRefresh: () => void;
+}
+
+export function InboxToolbar({ count, loading, lastRefreshedAt, onRefresh }: Props) {
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/60 p-3 pl-4 backdrop-blur">
+      <div className="flex min-w-0 items-center gap-2.5">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-300 ring-1 ring-inset ring-indigo-500/20">
+          <Inbox size={16} />
+        </div>
+        <div className="min-w-0">
+          <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-100">
+            Hộp thư đến
+            <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-medium text-slate-300">
+              {count} email
+            </span>
+          </h3>
+          <p className="mt-0.5 truncate text-[11px] text-slate-400">
+            {loading ? 'Đang đồng bộ...' : `Cập nhật ${formatDateTime(lastRefreshedAt)}`}
+          </p>
+        </div>
+      </div>
+      <Button
+        size="sm"
+        variant="secondary"
+        onClick={onRefresh}
+        loading={loading}
+        leftIcon={<RefreshCw size={14} />}
+      >
+        Refresh
+      </Button>
+    </div>
+  );
 }
