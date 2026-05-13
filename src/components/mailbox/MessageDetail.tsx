@@ -18,7 +18,6 @@ interface Props {
   error: string;
   onRetry: () => void;
   onCopyOtp: (otp: string) => Promise<boolean>;
-  onCopyFull: (content: string) => void;
 }
 
 export function MessageDetail({
@@ -27,7 +26,6 @@ export function MessageDetail({
   error,
   onRetry,
   onCopyOtp,
-  onCopyFull,
 }: Props) {
   const [tab, setTab] = useState<MessageTab>('html');
 
@@ -65,7 +63,6 @@ export function MessageDetail({
         <OtpHighlightCard
           otp={otp}
           onCopyOtp={onCopyOtp}
-          onCopyFull={() => onCopyFull(plainText)}
         />
       )}
 
@@ -108,15 +105,8 @@ export function MessageDetail({
         )}
 
         {!otp && (
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-3 text-xs text-slate-400">
+          <div className="mt-4 flex items-center justify-center rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-3 text-xs text-slate-400">
             <span>Không phát hiện được mã OTP trong email này.</span>
-            <button
-              type="button"
-              onClick={() => onCopyFull(plainText)}
-              className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 transition-colors hover:bg-white/10"
-            >
-              Copy toàn bộ nội dung
-            </button>
           </div>
         )}
       </Card>

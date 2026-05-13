@@ -6,16 +6,12 @@ import { cn } from '../../utils/cn';
 interface Props {
   otp: string;
   onCopyOtp: (otp: string) => Promise<boolean> | boolean;
-  onCopyFull?: () => void;
-  fullLabel?: string;
   compact?: boolean;
 }
 
 export function OtpHighlightCard({
   otp,
   onCopyOtp,
-  onCopyFull,
-  fullLabel = 'Copy toàn bộ nội dung',
   compact = false,
 }: Props) {
   const [justCopied, setJustCopied] = useState(false);
@@ -80,11 +76,6 @@ export function OtpHighlightCard({
           >
             {justCopied ? `Đã copy ${otp}` : 'Sao chép OTP'}
           </Button>
-          {onCopyFull && (
-            <Button variant="secondary" size="sm" onClick={onCopyFull}>
-              {fullLabel}
-            </Button>
-          )}
         </div>
       </div>
     </div>

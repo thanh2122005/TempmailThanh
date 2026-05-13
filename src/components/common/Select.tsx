@@ -12,6 +12,7 @@ export function Select({ className, children, ...props }: Props) {
           'h-10 w-full appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-9 text-sm text-slate-100 backdrop-blur',
           'outline-none transition-colors focus:border-indigo-400/60 focus:ring-2 focus:ring-indigo-400/60',
           'disabled:cursor-not-allowed disabled:opacity-50',
+          '[&>option]:bg-slate-800',
           className,
         )}
         {...props}

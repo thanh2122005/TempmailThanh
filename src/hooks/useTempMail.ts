@@ -50,14 +50,39 @@ export function useTempMail() {
     try {
       const res = await tempMailApi.getInbox(address);
       const sorted = sortMessagesByNewest(res.messages);
-      setInboxMessages(sorted);
+      
+      setInboxMessages((prev) => {
+        // Merge with existing full text/html if we already fetched them
+        return sorted.map(m => {
+          const existing = prev.find(p => p.id === m.id);
+          if (existing && (existing.text || existing.html)) {
+            return { ...m, text: existing.text, html: existing.html };
+          }
+          return m;
+        });
+      });
+
       if (selectedMessageId && !sorted.some((m) => m.id === selectedMessageId)) {
         setSelectedMessageId('');
         setSelectedMessageDetail(null);
       }
       setLastRefreshedAt(new Date().toISOString());
+
+      // Auto fetch detail for the newest message to extract OTP from body if needed
+      if (sorted.length > 0) {
+        const newest = sorted[0];
+        setInboxMessages(current => {
+          const currentNewest = current.find(m => m.id === newest.id);
+          if (currentNewest && !currentNewest.text && !currentNewest.html) {
+            tempMailApi.getMailDetail(address, newest.id).then(detail => {
+              setInboxMessages(prev => prev.map(m => m.id === newest.id ? { ...m, text: detail.text || m.text, html: detail.html || m.html } : m));
+            }).catch(console.error);
+          }
+          return current;
+        });
+      }
     } catch (error) {
-      setInboxError(error instanceof Error ? error.message : 'Kh\u00F4ng th\u1EC3 t\u1EA3i h\u1ED9p th\u01B0.');
+      setInboxError(error instanceof Error ? error.message : 'Không thể tải hộp thư.');
     } finally {
       setInboxLoading(false);
     }
@@ -96,6 +121,7 @@ export function useTempMail() {
     try {
       const detail = await tempMailApi.getMailDetail(address, id);
       setSelectedMessageDetail(detail);
+      setInboxMessages(prev => prev.map(m => m.id === id ? { ...m, text: detail.text || m.text, html: detail.html || m.html } : m));
     } catch (error) {
       setMessageError(error instanceof Error ? error.message : 'Kh\u00F4ng th\u1EC3 t\u1EA3i chi ti\u1EBFt email.');
     } finally {

@@ -51,19 +51,6 @@ export function HomePage() {
     else toast.addToast('Không thể sao chép địa chỉ', 'error');
   }, [clipboard, temp.currentAddress, toast]);
 
-  const copyFullContent = useCallback(
-    async (content: string) => {
-      if (!content) {
-        toast.addToast('Không có nội dung để sao chép', 'info');
-        return;
-      }
-      const ok = await clipboard.copy(content);
-      if (ok) toast.addToast('Đã sao chép nội dung email', 'success');
-      else toast.addToast('Không thể sao chép nội dung', 'error');
-    },
-    [clipboard, toast],
-  );
-
   const handleCustomSubmit = async (username: string, domain: string) => {
     const address = `${username}@${domain}`;
     await temp.setCurrentAddressLocal(address);
@@ -154,7 +141,6 @@ export function HomePage() {
               void temp.loadMessage(temp.currentAddress, temp.selectedMessageId)
             }
             onCopyOtp={copyOtp}
-            onCopyFull={copyFullContent}
           />
         }
       />
