@@ -3,7 +3,7 @@ import { MailOpen } from 'lucide-react';
 import type { MailDetail } from '../../types/api';
 import type { MessageTab } from '../../types/ui';
 import { formatDateTime, normalizeEmailSubject } from '../../utils/format';
-import { extractOtp, messageToPlainText } from '../../utils/otp';
+import { extractOtp } from '../../utils/otp';
 import { Card } from '../common/Card';
 import { EmptyState } from '../common/EmptyState';
 import { ErrorState } from '../common/ErrorState';
@@ -51,11 +51,7 @@ export function MessageDetail({
     );
   }
 
-  const plainText = messageToPlainText({
-    subject: message.subject,
-    text: message.text,
-    html: message.html,
-  });
+
 
   return (
     <div className="space-y-4">
