@@ -1,119 +1,64 @@
+import { apiRequest } from '../client';
 import type { InboxResponse, MailDetail, MailboxAddressResponse } from '../../types/api';
 import type { TempMailProvider } from './types';
 
 export class LoveYunaProvider implements TempMailProvider {
-  private baseUrl = 'https://webmail.loveyuna.today';
-  private apiKey: string | null = null;
-
-  private async getApiKey(): Promise<string> {
-    if (this.apiKey) return this.apiKey;
-    const stored = localStorage.getItem('loveyuna_api_key');
-    if (stored) {
-      this.apiKey = stored;
-      return stored;
-    }
-    
-    // Tạo API key mới nếu chưa có
-    const res = await fetch(`${this.baseUrl}/api/keys`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ label: 'TempMailThanh Web' })
-    });
-    
-    if (!res.ok) {
-      throw new Error('Không thể khởi tạo API key');
-    }
-    
-    const data = await res.json();
-    this.apiKey = data.key;
-    localStorage.setItem('loveyuna_api_key', data.key);
-    return data.key;
-  }
-
-  private async request<T>(path: string, options?: RequestInit): Promise<T> {
-    const key = await this.getApiKey();
-    const res = await fetch(`${this.baseUrl}${path}`, {
-      ...options,
-      headers: {
-        'Authorization': `Bearer ${key}`,
-        'Content-Type': 'application/json',
-        ...options?.headers,
-      }
-    });
-    
-    const data = await res.json();
-    if (!data.ok) {
-      if (data.code === 'UNAUTHORIZED' || data.code === 'INVALID_KEY') {
-        // Xóa key cũ đi và bắt lỗi để người dùng tải lại
-        localStorage.removeItem('loveyuna_api_key');
-        this.apiKey = null;
-        throw new Error('API Key hết hạn hoặc không hợp lệ, vui lòng tải lại trang.');
-      }
-      throw new Error(data.error || 'Yêu cầu thất bại');
-    }
-    
-    return data.data;
-  }
-
   async getDomains(): Promise<string[]> {
     try {
-      const res = await fetch(`${this.baseUrl}/api/domains`);
-      const data = await res.json();
-      if (data.domains && Array.isArray(data.domains)) {
-        return data.domains;
+      const res = await apiRequest<{domains: string[]}>('/api/domains');
+      if (res && Array.isArray(res.domains)) {
+        return res.domains;
       }
     } catch (e) {
       console.error('Error fetching domains:', e);
     }
-    return ['webmail.loveyuna.today'];
+    return ['lamgpt.cloud', 'vnforeo.com', 'vietkieu.edu.pl'];
   }
 
   async createRandomAddress(): Promise<MailboxAddressResponse> {
-    const data = await this.request<any>('/v1/address');
+    const domains = await this.getDomains();
+    const domain = domains[Math.floor(Math.random() * domains.length)];
+    const username = Math.random().toString(36).substring(2, 12);
     return {
-      address: data.address,
-      ttl: data.ttl,
-      expiresAt: data.expiresAt
+      address: `${username}@${domain}`,
+      ttl: 3600
     };
   }
 
   async createCustomAddress(username: string, domain: string): Promise<MailboxAddressResponse> {
-    // API v1 có thể hỗ trợ query params để tạo địa chỉ
-    const data = await this.request<any>(`/v1/address?domain=${encodeURIComponent(domain)}&username=${encodeURIComponent(username)}`);
     return {
-      address: data.address || `${username}@${domain}`,
-      ttl: data.ttl,
-      expiresAt: data.expiresAt
+      address: `${username}@${domain}`,
+      ttl: 3600
     };
   }
 
   async getInbox(address: string): Promise<InboxResponse> {
-    const data = await this.request<any>(`/v1/inbox/${address}`);
+    const res = await apiRequest<any>(`/api/inbox/${encodeURIComponent(address)}`);
+    const rawList = Array.isArray(res.emails) ? res.emails : (Array.isArray(res.messages) ? res.messages : []);
+    
     return {
-      messages: data.emails.map((e: any) => ({
-        id: e.id,
-        from: e.from,
+      messages: rawList.map((e: any) => ({
+        id: e.id || '',
+        from: e.from || '',
         to: address,
-        subject: e.subject,
-        receivedAt: e.date || e.receivedAt,
-        text: e.text || e.preview || (e.hasHtml ? 'Email này có chứa mã HTML' : ''),
+        subject: e.subject || '',
+        receivedAt: e.date || e.receivedAt || '',
+        text: e.text || e.preview || (e.hasHtml ? 'Email có chứa HTML' : ''),
         html: e.html || '',
       }))
     };
   }
 
-  async getMailDetail(address: string, id: string): Promise<MailDetail> {
-    const data = await this.request<any>(`/v1/email/${id}?address=${address}`);
-    const e = data.email;
+  async getMailDetail(_address: string, id: string): Promise<MailDetail> {
+    const res = await apiRequest<any>(`/api/email/${encodeURIComponent(id)}`);
     return {
-      id: e.id,
-      from: e.from,
-      to: e.to,
-      subject: e.subject,
-      receivedAt: e.date || e.receivedAt,
-      text: e.text || '',
-      html: e.html || '',
-      attachments: e.attachments || []
+      id: res.id || id,
+      from: res.from || '',
+      to: res.to || '',
+      subject: res.subject || '',
+      receivedAt: res.date || res.receivedAt || '',
+      text: res.textBody || res.text || res.preview || '',
+      html: res.body || res.html || '',
     };
   }
 }
