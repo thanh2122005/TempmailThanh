@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://webmail.loveyuna.today',
+        target: 'https://mail.cskh-group.com',
         changeOrigin: true,
         secure: false,
       }

@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://webmail.loveyuna.today/api/$1"
+      "destination": "https://mail.cskh-group.com/api/$1"
     },
     {
       "source": "/(.*)",

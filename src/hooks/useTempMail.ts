@@ -109,27 +109,6 @@ export function useTempMail() {
     }
   }, [loadInbox, recent]);
 
-  const createCustomAddress = useCallback(async (username: string, domain: string) => {
-    setAddressLoading(true);
-    setAddressError('');
-    try {
-      const data = await tempMailApi.createCustomAddress(username, domain);
-      setCurrentAddress(data.address);
-      setString(storageKeys.currentAddress, data.address);
-      setAddressMeta(data);
-      recent.add(data.address);
-      setSelectedMessageId('');
-      setSelectedMessageDetail(null);
-      await loadInbox(data.address);
-      return data;
-    } catch (error) {
-      setAddressError(error instanceof Error ? error.message : 'Kh\u00F4ng th\u1EC3 t\u1EA1o \u0111\u1ECBa ch\u1EC9 t\u00F9y ch\u1EC9nh.');
-      throw error;
-    } finally {
-      setAddressLoading(false);
-    }
-  }, [loadInbox, recent]);
-
   const loadMessage = useCallback(async (address: string, id: string) => {
     if (!address || !id) return;
     setMessageLoading(true);
@@ -210,7 +189,6 @@ export function useTempMail() {
     initializeApp,
     loadDomains,
     createRandomAddress,
-    createCustomAddress,
     loadInbox,
     refreshInbox,
     loadMessage,

@@ -1,7 +1,7 @@
-import { LoveYunaProvider } from './loveyunaProvider';
+import { CskhTempMailProvider } from './cskhProvider';
 import type { TempMailProvider } from './types';
 
-const defaultProvider: TempMailProvider = new LoveYunaProvider();
+const defaultProvider: TempMailProvider = new CskhTempMailProvider();
 
 export function getProvider(): TempMailProvider {
   return defaultProvider;
