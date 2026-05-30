@@ -16,19 +16,20 @@ export class LoveYunaProvider implements TempMailProvider {
   }
 
   async createRandomAddress(): Promise<MailboxAddressResponse> {
-    const domains = await this.getDomains();
-    const domain = domains[Math.floor(Math.random() * domains.length)];
-    const username = Math.random().toString(36).substring(2, 12);
+    const res = await apiRequest<any>('/api/generate?ttl=3600');
     return {
-      address: `${username}@${domain}`,
-      ttl: 3600
+      address: res.address || res.email,
+      ttl: res.ttl || 3600,
+      expiresAt: res.expiresAt
     };
   }
 
   async createCustomAddress(username: string, domain: string): Promise<MailboxAddressResponse> {
+    const res = await apiRequest<any>(`/api/generate/${encodeURIComponent(username)}/${encodeURIComponent(domain)}?ttl=3600`);
     return {
-      address: `${username}@${domain}`,
-      ttl: 3600
+      address: res.address || res.email || `${username}@${domain}`,
+      ttl: res.ttl || 3600,
+      expiresAt: res.expiresAt
     };
   }
 
