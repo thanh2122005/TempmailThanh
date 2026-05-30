@@ -1,7 +1,7 @@
-import { LoveYunaProvider } from './loveyunaProvider';
+import { MultiProvider } from './multiProvider';
 import type { TempMailProvider } from './types';
 
-const defaultProvider: TempMailProvider = new LoveYunaProvider();
+const defaultProvider: TempMailProvider = new MultiProvider();
 
 export function getProvider(): TempMailProvider {
   return defaultProvider;
