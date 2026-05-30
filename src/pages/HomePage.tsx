@@ -52,8 +52,7 @@ export function HomePage() {
   }, [clipboard, temp.currentAddress, toast]);
 
   const handleCustomSubmit = async (username: string, domain: string) => {
-    const address = `${username}@${domain}`;
-    await temp.setCurrentAddressLocal(address);
+    await temp.createCustomAddress(username, domain);
     toast.addToast('Đã tạo địa chỉ tùy chỉnh', 'success');
   };
 
