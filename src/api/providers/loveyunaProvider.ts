@@ -56,6 +56,15 @@ export class LoveYunaProvider implements TempMailProvider {
   }
 
   async getDomains(): Promise<string[]> {
+    try {
+      const res = await fetch(`${this.baseUrl}/api/domains`);
+      const data = await res.json();
+      if (data.domains && Array.isArray(data.domains)) {
+        return data.domains;
+      }
+    } catch (e) {
+      console.error('Error fetching domains:', e);
+    }
     return ['webmail.loveyuna.today'];
   }
 
@@ -68,9 +77,14 @@ export class LoveYunaProvider implements TempMailProvider {
     };
   }
 
-  async createCustomAddress(_username: string, _domain: string): Promise<MailboxAddressResponse> {
-    // API LoveYuna hiện tại chỉ cho phép random address
-    return this.createRandomAddress();
+  async createCustomAddress(username: string, domain: string): Promise<MailboxAddressResponse> {
+    // API v1 có thể hỗ trợ query params để tạo địa chỉ
+    const data = await this.request<any>(`/v1/address?domain=${encodeURIComponent(domain)}&username=${encodeURIComponent(username)}`);
+    return {
+      address: data.address || `${username}@${domain}`,
+      ttl: data.ttl,
+      expiresAt: data.expiresAt
+    };
   }
 
   async getInbox(address: string): Promise<InboxResponse> {
